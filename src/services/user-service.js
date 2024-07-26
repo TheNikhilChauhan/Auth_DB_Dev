@@ -37,6 +37,15 @@ class UserService {
       throw error;
     }
   }
+
+  checkPassword(userPlainPassword, encryptedPassword) {
+    try {
+      return bcrypt.compareSync(userPlainPassword, encryptedPassword);
+    } catch (error) {
+      console.log("Something went wrong in token creation");
+      throw error;
+    }
+  }
 }
 
 module.exports = UserService;
