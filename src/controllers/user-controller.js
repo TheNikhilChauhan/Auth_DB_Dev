@@ -15,11 +15,11 @@ const createUser = async (req, res) => {
       err: {},
     });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(error.statusCode).json({
       data: {},
       success: false,
-      message: "Something went wrong in controller layer",
-      err: error,
+      message: error.message,
+      err: error.explanation,
     });
   }
 };
@@ -65,8 +65,29 @@ const isAuthenticated = async (req, res) => {
     });
   }
 };
+
+const isAdmin = async (req, res) => {
+  try {
+    const response = await userService.isAdmin(req.body.id);
+    return res.status(200).json({
+      success: true,
+      err: {},
+      data: response,
+      message: "Successfully fetched whether user is admin or not",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      data: {},
+      success: false,
+      message: "Something went wrong",
+      err: error,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   signin,
   isAuthenticated,
+  isAdmin,
 };

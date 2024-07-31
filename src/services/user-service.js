@@ -14,6 +14,9 @@ class UserService {
       const user = await this.userRepo.create(data);
       return user;
     } catch (error) {
+      if (error.name == "SequelizeValidationError") {
+        throw error;
+      }
       console.log("Something went wrong in the service layer");
       throw error;
     }
@@ -81,6 +84,15 @@ class UserService {
       return bcrypt.compareSync(userPlainPassword, encryptedPassword);
     } catch (error) {
       console.log("Something went wrong in password check");
+      throw error;
+    }
+  }
+
+  isAdmin(userId) {
+    try {
+      return this.userRepo.isAdmin(userId);
+    } catch (error) {
+      console.log("Something went wrong in isAdmin service");
       throw error;
     }
   }
